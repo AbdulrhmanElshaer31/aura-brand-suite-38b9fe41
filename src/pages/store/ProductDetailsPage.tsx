@@ -143,9 +143,9 @@ const ProductDetailsPage = () => {
             {/* Fragrance Notes */}
             <div className="bg-card border border-border rounded-xl p-6 space-y-6">
               <h3 className="font-heading text-2xl text-gradient-gold">Fragrance Notes</h3>
-              {noteSection("Top Notes", product.topNotes, "border-primary/40 text-primary")}
-              {noteSection("Middle Notes", product.middleNotes, "border-muted-foreground/30 text-muted-foreground")}
-              {noteSection("Base Notes", product.baseNotes, "border-border text-muted-foreground/80")}
+              {noteSection("Top Notes", product.top_notes, "border-primary/40 text-primary")}
+              {noteSection("Middle Notes", product.middle_notes, "border-muted-foreground/30 text-muted-foreground")}
+              {noteSection("Base Notes", product.base_notes, "border-border text-muted-foreground/80")}
             </div>
           </motion.div>
         </div>
