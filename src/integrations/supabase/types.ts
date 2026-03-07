@@ -14,7 +14,123 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      brand_settings: {
+        Row: {
+          about_text: string
+          brand_name: string
+          id: number
+          logo_url: string
+          primary_color: string
+          secondary_color: string
+          tagline: string
+          updated_at: string
+          whatsapp_number: string
+          whatsapp_template: string
+        }
+        Insert: {
+          about_text?: string
+          brand_name?: string
+          id?: number
+          logo_url?: string
+          primary_color?: string
+          secondary_color?: string
+          tagline?: string
+          updated_at?: string
+          whatsapp_number?: string
+          whatsapp_template?: string
+        }
+        Update: {
+          about_text?: string
+          brand_name?: string
+          id?: number
+          logo_url?: string
+          primary_color?: string
+          secondary_color?: string
+          tagline?: string
+          updated_at?: string
+          whatsapp_number?: string
+          whatsapp_template?: string
+        }
+        Relationships: []
+      }
+      daily_stats: {
+        Row: {
+          clicks: number
+          created_at: string
+          date: string
+          id: string
+        }
+        Insert: {
+          clicks?: number
+          created_at?: string
+          date: string
+          id?: string
+        }
+        Update: {
+          clicks?: number
+          created_at?: string
+          date?: string
+          id?: string
+        }
+        Relationships: []
+      }
+      products: {
+        Row: {
+          badge: string | null
+          base_notes: string[]
+          category: string
+          created_at: string
+          description: string
+          id: string
+          images: string[]
+          middle_notes: string[]
+          name: string
+          order_clicks: number
+          price: number
+          size: string
+          status: string
+          top_notes: string[]
+          updated_at: string
+          views: number
+        }
+        Insert: {
+          badge?: string | null
+          base_notes?: string[]
+          category?: string
+          created_at?: string
+          description?: string
+          id?: string
+          images?: string[]
+          middle_notes?: string[]
+          name: string
+          order_clicks?: number
+          price?: number
+          size?: string
+          status?: string
+          top_notes?: string[]
+          updated_at?: string
+          views?: number
+        }
+        Update: {
+          badge?: string | null
+          base_notes?: string[]
+          category?: string
+          created_at?: string
+          description?: string
+          id?: string
+          images?: string[]
+          middle_notes?: string[]
+          name?: string
+          order_clicks?: number
+          price?: number
+          size?: string
+          status?: string
+          top_notes?: string[]
+          updated_at?: string
+          views?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
