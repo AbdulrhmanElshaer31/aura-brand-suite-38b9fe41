@@ -1,20 +1,35 @@
 export const normalizeWhatsAppPhone = (phone: string): string => phone.replace(/\D/g, '');
 
+const isMobileDevice = (): boolean => {
+  if (typeof navigator === 'undefined') return false;
+  return /Android|iPhone|iPad|iPod|IEMobile|Opera Mini/i.test(navigator.userAgent);
+};
+
+const buildDesktopWhatsAppUrl = (phone: string, message: string): string =>
+  `https://web.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(message.trim())}`;
+
+const buildMobileWhatsAppUrl = (phone: string, message: string): string =>
+  `https://wa.me/${phone}?text=${encodeURIComponent(message.trim())}`;
+
 export const buildWhatsAppUrl = (phone: string, message: string): string => {
   const normalizedPhone = normalizeWhatsAppPhone(phone);
-  return `https://wa.me/${normalizedPhone}?text=${encodeURIComponent(message.trim())}`;
+  if (!normalizedPhone) return '';
+
+  return isMobileDevice()
+    ? buildMobileWhatsAppUrl(normalizedPhone, message)
+    : buildDesktopWhatsAppUrl(normalizedPhone, message);
 };
 
 export const openWhatsAppChat = (phone: string, message: string): void => {
-  const url = buildWhatsAppUrl(phone, message);
+  const normalizedPhone = normalizeWhatsAppPhone(phone);
+  if (!normalizedPhone) return;
 
-  const link = document.createElement('a');
-  link.href = url;
-  link.target = '_blank';
-  link.rel = 'noopener noreferrer';
-  link.style.display = 'none';
+  const primaryUrl = buildWhatsAppUrl(normalizedPhone, message);
+  const fallbackUrl = buildMobileWhatsAppUrl(normalizedPhone, message);
 
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+  const popup = window.open(primaryUrl, '_blank', 'noopener,noreferrer');
+
+  if (!popup) {
+    window.location.assign(fallbackUrl);
+  }
 };
