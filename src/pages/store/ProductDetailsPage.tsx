@@ -50,7 +50,7 @@ const ProductDetailsPage = () => {
 
   const noteSection = (title: string, notes: string[], color: string) => (
     <div>
-      <h4 className="font-heading text-lg text-foreground mb-2">{title}</h4>
+      <h4 className="font-heading text-base sm:text-lg text-foreground mb-2">{title}</h4>
       <div className="flex flex-wrap gap-2">
         {notes.map((note) => (
           <span key={note} className={`px-3 py-1 rounded-full text-xs font-body border ${color}`}>
@@ -64,15 +64,15 @@ const ProductDetailsPage = () => {
   return (
     <div className="min-h-screen bg-background">
       <StoreHeader />
-      <div className="pt-24 pb-16 container mx-auto px-4">
+      <div className="pt-20 sm:pt-24 pb-16 container mx-auto px-4">
         <Link
           to="/products"
-          className="inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors font-body text-sm mb-8"
+          className="inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors font-body text-sm mb-6 sm:mb-8"
         >
           <ArrowLeft className="w-4 h-4" /> Back to Collection
         </Link>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12">
           {/* Images */}
           <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }}>
             <div className="relative aspect-square rounded-xl overflow-hidden bg-card border border-border mb-4">
@@ -81,26 +81,26 @@ const ProductDetailsPage = () => {
                 <>
                   <button
                     onClick={prevImage}
-                    className="absolute left-3 top-1/2 -translate-y-1/2 bg-background/70 backdrop-blur-sm p-2 rounded-full hover:bg-background transition-colors"
+                    className="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 bg-background/70 backdrop-blur-sm p-1.5 sm:p-2 rounded-full hover:bg-background transition-colors"
                   >
-                    <ChevronLeft className="w-5 h-5 text-foreground" />
+                    <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 text-foreground" />
                   </button>
                   <button
                     onClick={nextImage}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 bg-background/70 backdrop-blur-sm p-2 rounded-full hover:bg-background transition-colors"
+                    className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 bg-background/70 backdrop-blur-sm p-1.5 sm:p-2 rounded-full hover:bg-background transition-colors"
                   >
-                    <ChevronRight className="w-5 h-5 text-foreground" />
+                    <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-foreground" />
                   </button>
                 </>
               )}
             </div>
             {images.length > 1 && (
-              <div className="flex gap-3 overflow-x-auto pb-2">
+              <div className="flex gap-2 sm:gap-3 overflow-x-auto pb-2">
                 {images.map((img, i) => (
                   <button
                     key={i}
                     onClick={() => setSelectedImage(i)}
-                    className={`w-20 h-20 rounded-lg overflow-hidden border-2 flex-shrink-0 transition-all ${
+                    className={`w-16 h-16 sm:w-20 sm:h-20 rounded-lg overflow-hidden border-2 flex-shrink-0 transition-all ${
                       i === selectedImage ? "border-primary shadow-gold" : "border-border opacity-60 hover:opacity-100"
                     }`}
                   >
@@ -126,25 +126,25 @@ const ProductDetailsPage = () => {
               )}
             </div>
 
-            <h1 className="font-heading text-4xl text-foreground mb-3">{product.name}</h1>
-            <p className="text-primary font-heading text-3xl mb-6">${product.price}</p>
-            <p className="text-muted-foreground font-body leading-relaxed mb-4">{product.description}</p>
-            <p className="text-muted-foreground/70 font-body text-sm mb-8">Size: {product.size}</p>
+            <h1 className="font-heading text-3xl sm:text-4xl text-foreground mb-3">{product.name}</h1>
+            <p className="text-primary font-heading text-2xl sm:text-3xl mb-4 sm:mb-6">${product.price}</p>
+            <p className="text-muted-foreground font-body leading-relaxed mb-4 text-sm sm:text-base">{product.description}</p>
+            <p className="text-muted-foreground/70 font-body text-sm mb-6 sm:mb-8">Size: {product.size}</p>
 
             <a
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => incrementOrderClicks.mutate(product.id)}
-              className="w-full bg-gold-gradient text-primary-foreground py-4 rounded-xl font-body font-semibold text-lg flex items-center justify-center gap-3 hover:shadow-gold-lg transition-all duration-300 hover:scale-[1.02] mb-10"
+              className="w-full bg-gold-gradient text-primary-foreground py-3 sm:py-4 rounded-xl font-body font-semibold text-base sm:text-lg flex items-center justify-center gap-3 hover:shadow-gold-lg transition-all duration-300 hover:scale-[1.02] mb-8 sm:mb-10"
             >
               <MessageCircle className="w-5 h-5" />
               Order via WhatsApp
             </a>
 
             {/* Fragrance Notes */}
-            <div className="bg-card border border-border rounded-xl p-6 space-y-6">
-              <h3 className="font-heading text-2xl text-gradient-gold">Fragrance Notes</h3>
+            <div className="bg-card border border-border rounded-xl p-4 sm:p-6 space-y-4 sm:space-y-6">
+              <h3 className="font-heading text-xl sm:text-2xl text-gradient-gold">Fragrance Notes</h3>
               {noteSection("Top Notes", product.top_notes, "border-primary/40 text-primary")}
               {noteSection("Middle Notes", product.middle_notes, "border-muted-foreground/30 text-muted-foreground")}
               {noteSection("Base Notes", product.base_notes, "border-border text-muted-foreground/80")}

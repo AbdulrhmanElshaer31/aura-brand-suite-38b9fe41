@@ -34,39 +34,39 @@ const AdminDashboard = () => {
 
   return (
     <AdminLayout>
-      <h1 className="font-heading text-3xl text-foreground mb-8">{t('dashboard')}</h1>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+      <h1 className="font-heading text-2xl sm:text-3xl text-foreground mb-6 sm:mb-8">{t('dashboard')}</h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-10">
         {stats.map((stat, i) => (
           <motion.div key={stat.label} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}
-            className="bg-card border border-border rounded-xl p-6">
-            <div className="flex items-center justify-between mb-4">
-              <span className="text-muted-foreground font-body text-sm">{stat.label}</span>
-              <stat.icon className="w-5 h-5 text-primary" />
+            className="bg-card border border-border rounded-xl p-4 sm:p-6">
+            <div className="flex items-center justify-between mb-3 sm:mb-4">
+              <span className="text-muted-foreground font-body text-xs sm:text-sm">{stat.label}</span>
+              <stat.icon className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
             </div>
-            <p className="font-heading text-4xl text-foreground">{stat.value}</p>
+            <p className="font-heading text-3xl sm:text-4xl text-foreground">{stat.value}</p>
           </motion.div>
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10">
-        <div className="bg-card border border-border rounded-xl p-6">
-          <h3 className="font-heading text-lg text-foreground mb-6">{t('categoriesDistribution')}</h3>
-          <ResponsiveContainer width="100%" height={250}>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-8 sm:mb-10">
+        <div className="bg-card border border-border rounded-xl p-4 sm:p-6">
+          <h3 className="font-heading text-base sm:text-lg text-foreground mb-4 sm:mb-6">{t('categoriesDistribution')}</h3>
+          <ResponsiveContainer width="100%" height={220}>
             <PieChart>
-              <Pie data={categoryData} cx="50%" cy="50%" outerRadius={90} dataKey="value" label={({ name, value }) => `${name}: ${value}`}>
+              <Pie data={categoryData} cx="50%" cy="50%" outerRadius={80} dataKey="value" label={({ name, value }) => `${name}: ${value}`}>
                 {categoryData.map((_, i) => (<Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />))}
               </Pie>
               <Tooltip contentStyle={{ backgroundColor: '#1A1A1A', border: '1px solid #333', borderRadius: '8px', fontFamily: 'Poppins' }} />
             </PieChart>
           </ResponsiveContainer>
         </div>
-        <div className="bg-card border border-border rounded-xl p-6">
-          <h3 className="font-heading text-lg text-foreground mb-6">{t('dailyOrderClicks')}</h3>
-          <ResponsiveContainer width="100%" height={250}>
+        <div className="bg-card border border-border rounded-xl p-4 sm:p-6">
+          <h3 className="font-heading text-base sm:text-lg text-foreground mb-4 sm:mb-6">{t('dailyOrderClicks')}</h3>
+          <ResponsiveContainer width="100%" height={220}>
             <LineChart data={dailyStats.slice(-14)}>
               <CartesianGrid strokeDasharray="3 3" stroke="#333" />
-              <XAxis dataKey="date" tick={{ fontSize: 11, fill: '#BFBFBF', fontFamily: 'Poppins' }} tickFormatter={(v) => v.slice(5)} />
-              <YAxis tick={{ fontSize: 11, fill: '#BFBFBF', fontFamily: 'Poppins' }} />
+              <XAxis dataKey="date" tick={{ fontSize: 10, fill: '#BFBFBF', fontFamily: 'Poppins' }} tickFormatter={(v) => v.slice(5)} />
+              <YAxis tick={{ fontSize: 10, fill: '#BFBFBF', fontFamily: 'Poppins' }} />
               <Tooltip contentStyle={{ backgroundColor: '#1A1A1A', border: '1px solid #333', borderRadius: '8px', fontFamily: 'Poppins' }} />
               <Line type="monotone" dataKey="clicks" stroke="hsl(45, 70%, 47%)" strokeWidth={2} dot={{ fill: 'hsl(45, 70%, 47%)' }} />
             </LineChart>
@@ -74,16 +74,16 @@ const AdminDashboard = () => {
         </div>
       </div>
 
-      <div className="bg-card border border-border rounded-xl p-6">
-        <h3 className="font-heading text-lg text-foreground mb-4">{t('mostViewedProducts')}</h3>
+      <div className="bg-card border border-border rounded-xl p-4 sm:p-6">
+        <h3 className="font-heading text-base sm:text-lg text-foreground mb-4">{t('mostViewedProducts')}</h3>
         <div className="space-y-3">
           {topViewed.map((p) => (
             <div key={p.id} className="flex items-center justify-between py-3 border-b border-border last:border-0">
-              <div>
-                <p className="font-body text-sm text-foreground">{p.name}</p>
+              <div className="min-w-0 flex-1">
+                <p className="font-body text-sm text-foreground truncate">{p.name}</p>
                 <p className="font-body text-xs text-muted-foreground">{p.category} · {p.size}</p>
               </div>
-              <div className="text-end">
+              <div className="text-end flex-shrink-0 ms-4">
                 <p className="font-body text-sm text-primary">{p.views} {t('views')}</p>
                 <p className="font-body text-xs text-muted-foreground">{p.order_clicks} {t('clicks')}</p>
               </div>

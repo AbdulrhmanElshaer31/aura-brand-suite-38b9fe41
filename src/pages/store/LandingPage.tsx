@@ -39,17 +39,17 @@ const LandingPage = () => {
       <StoreHeader />
 
       {/* Hero */}
-      <section className="relative h-screen flex items-center justify-center overflow-hidden">
+      <section className="relative h-[80vh] sm:h-screen flex items-center justify-center overflow-hidden">
         <img src={heroImg} alt="Luxury perfumes" className="absolute inset-0 w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-background/30" />
         <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.3 }} className="relative text-center px-4 max-w-3xl">
-          <h1 className="font-heading text-5xl md:text-7xl text-gradient-gold mb-4 leading-tight">
+          <h1 className="font-heading text-4xl sm:text-5xl md:text-7xl text-gradient-gold mb-4 leading-tight">
             {settings?.brand_name || 'MAISON ÉLÉGANCE'}
           </h1>
-          <p className="text-muted-foreground font-body text-lg md:text-xl mb-8 tracking-wide">
+          <p className="text-muted-foreground font-body text-base sm:text-lg md:text-xl mb-6 sm:mb-8 tracking-wide">
             {settings?.tagline}
           </p>
-          <Link to="/products" className="inline-block bg-gold-gradient text-primary-foreground px-10 py-4 rounded-full font-body font-semibold tracking-wider hover:shadow-gold-lg transition-all duration-300 hover:scale-105">
+          <Link to="/products" className="inline-block bg-gold-gradient text-primary-foreground px-8 sm:px-10 py-3 sm:py-4 rounded-full font-body font-semibold tracking-wider hover:shadow-gold-lg transition-all duration-300 hover:scale-105 text-sm sm:text-base">
             {t('exploreCollection')}
           </Link>
         </motion.div>
@@ -57,12 +57,12 @@ const LandingPage = () => {
 
       {/* Featured */}
       {featured.length > 0 && (
-        <section className="py-24 container mx-auto px-4">
-          <motion.div {...fadeUp} className="text-center mb-16">
-            <h2 className="font-heading text-4xl text-gradient-gold mb-3">{t('featuredCollection')}</h2>
-            <p className="text-muted-foreground font-body">{t('featuredDesc')}</p>
+        <section className="py-16 sm:py-24 container mx-auto px-4">
+          <motion.div {...fadeUp} className="text-center mb-10 sm:mb-16">
+            <h2 className="font-heading text-3xl sm:text-4xl text-gradient-gold mb-3">{t('featuredCollection')}</h2>
+            <p className="text-muted-foreground font-body text-sm sm:text-base">{t('featuredDesc')}</p>
           </motion.div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8">
             {featured.map((p) => (
               <ProductCard key={p.id} product={p} onQuickView={setQuickViewProduct} />
             ))}
@@ -72,13 +72,13 @@ const LandingPage = () => {
 
       {/* Best Sellers */}
       {bestSellers.length > 0 && (
-        <section className="py-24 bg-card">
+        <section className="py-16 sm:py-24 bg-card">
           <div className="container mx-auto px-4">
-            <motion.div {...fadeUp} className="text-center mb-16">
-              <h2 className="font-heading text-4xl text-gradient-gold mb-3">{t('bestSellers')}</h2>
-              <p className="text-muted-foreground font-body">{t('bestSellersDesc')}</p>
+            <motion.div {...fadeUp} className="text-center mb-10 sm:mb-16">
+              <h2 className="font-heading text-3xl sm:text-4xl text-gradient-gold mb-3">{t('bestSellers')}</h2>
+              <p className="text-muted-foreground font-body text-sm sm:text-base">{t('bestSellersDesc')}</p>
             </motion.div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8">
               {bestSellers.map((p) => (
                 <ProductCard key={p.id} product={p} onQuickView={setQuickViewProduct} />
               ))}
@@ -88,18 +88,18 @@ const LandingPage = () => {
       )}
 
       {/* Categories */}
-      <section className="py-24 container mx-auto px-4">
-        <motion.div {...fadeUp} className="text-center mb-16">
-          <h2 className="font-heading text-4xl text-gradient-gold mb-3">{t('fragranceFamilies')}</h2>
-          <p className="text-muted-foreground font-body">{t('findSignature')}</p>
+      <section className="py-16 sm:py-24 container mx-auto px-4">
+        <motion.div {...fadeUp} className="text-center mb-10 sm:mb-16">
+          <h2 className="font-heading text-3xl sm:text-4xl text-gradient-gold mb-3">{t('fragranceFamilies')}</h2>
+          <p className="text-muted-foreground font-body text-sm sm:text-base">{t('findSignature')}</p>
         </motion.div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8">
           {categories.map((cat, i) => (
             <motion.div key={cat.key} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.15 }}>
-              <Link to={`/products?category=${cat.key}`} className="block bg-card border border-border rounded-xl p-10 text-center hover:border-primary/40 hover:shadow-gold transition-all duration-500 group">
-                <cat.icon className="w-10 h-10 mx-auto mb-4 text-primary group-hover:scale-110 transition-transform" />
-                <h3 className="font-heading text-2xl text-foreground mb-2">{t(cat.key)}</h3>
-                <p className="text-muted-foreground text-sm font-body">{t(`${cat.key}Desc` as any)}</p>
+              <Link to={`/products?category=${cat.key}`} className="block bg-card border border-border rounded-xl p-8 sm:p-10 text-center hover:border-primary/40 hover:shadow-gold transition-all duration-500 group">
+                <cat.icon className="w-8 h-8 sm:w-10 sm:h-10 mx-auto mb-4 text-primary group-hover:scale-110 transition-transform" />
+                <h3 className="font-heading text-xl sm:text-2xl text-foreground mb-2">{t(cat.key)}</h3>
+                <p className="text-muted-foreground text-xs sm:text-sm font-body">{t(`${cat.key}Desc` as any)}</p>
               </Link>
             </motion.div>
           ))}
@@ -107,11 +107,11 @@ const LandingPage = () => {
       </section>
 
       {/* About */}
-      <section className="py-24 bg-card">
+      <section className="py-16 sm:py-24 bg-card">
         <div className="container mx-auto px-4 max-w-3xl text-center">
           <motion.div {...fadeUp}>
-            <h2 className="font-heading text-4xl text-gradient-gold mb-6">{t('aboutBrand')}</h2>
-            <p className="text-muted-foreground font-body leading-relaxed text-lg">
+            <h2 className="font-heading text-3xl sm:text-4xl text-gradient-gold mb-6">{t('aboutBrand')}</h2>
+            <p className="text-muted-foreground font-body leading-relaxed text-base sm:text-lg">
               {settings?.about_text}
             </p>
           </motion.div>

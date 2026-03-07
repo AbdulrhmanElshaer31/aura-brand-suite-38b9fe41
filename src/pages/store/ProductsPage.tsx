@@ -39,27 +39,27 @@ const ProductsPage = () => {
   return (
     <div className="min-h-screen bg-background">
       <StoreHeader />
-      <div className="pt-24 pb-16 container mx-auto px-4">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-12">
-          <h1 className="font-heading text-4xl text-gradient-gold mb-3">{t('ourCollection')}</h1>
-          <p className="text-muted-foreground font-body">{t('exploreDesc')}</p>
+      <div className="pt-20 sm:pt-24 pb-16 container mx-auto px-4">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-8 sm:mb-12">
+          <h1 className="font-heading text-3xl sm:text-4xl text-gradient-gold mb-3">{t('ourCollection')}</h1>
+          <p className="text-muted-foreground font-body text-sm sm:text-base">{t('exploreDesc')}</p>
         </motion.div>
 
-        <div className="flex flex-col md:flex-row gap-4 mb-10 items-center justify-between">
-          <div className="relative w-full md:w-80">
+        <div className="flex flex-col gap-4 mb-8 sm:mb-10">
+          <div className="relative w-full sm:max-w-sm">
             <Search className="absolute start-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <input type="text" placeholder={t('searchFragrances')} value={search} onChange={(e) => setSearch(e.target.value)}
               className="w-full ps-10 pe-4 py-3 bg-card border border-border rounded-lg text-foreground font-body text-sm placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors" />
           </div>
-          <div className="flex items-center gap-3 flex-wrap">
+          <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
             {categories.map((cat) => (
               <button key={cat} onClick={() => setCategory(cat)}
-                className={`px-5 py-2 rounded-full text-sm font-body capitalize transition-all ${categoryFilter === cat ? 'bg-gold-gradient text-primary-foreground shadow-gold' : 'bg-card border border-border text-muted-foreground hover:border-primary/40'}`}>
+                className={`px-4 sm:px-5 py-2 rounded-full text-xs sm:text-sm font-body capitalize transition-all ${categoryFilter === cat ? 'bg-gold-gradient text-primary-foreground shadow-gold' : 'bg-card border border-border text-muted-foreground hover:border-primary/40'}`}>
                 {t(cat)}
               </button>
             ))}
             <select value={sort} onChange={(e) => setSort(e.target.value)}
-              className="px-4 py-2 bg-card border border-border rounded-lg text-sm font-body text-muted-foreground focus:outline-none focus:border-primary">
+              className="px-3 sm:px-4 py-2 bg-card border border-border rounded-lg text-xs sm:text-sm font-body text-muted-foreground focus:outline-none focus:border-primary">
               <option value="default">{t('sortBy')}</option>
               <option value="price_asc">{t('priceLowHigh')}</option>
               <option value="price_desc">{t('priceHighLow')}</option>
@@ -68,7 +68,7 @@ const ProductsPage = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6">
           {filtered.map((p) => (
             <ProductCard key={p.id} product={p} onQuickView={setQuickViewProduct} />
           ))}
