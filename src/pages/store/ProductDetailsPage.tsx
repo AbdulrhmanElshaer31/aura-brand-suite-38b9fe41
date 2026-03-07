@@ -2,18 +2,24 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowLeft, MessageCircle, ChevronLeft, ChevronRight } from "lucide-react";
-import { useStore } from "@/store/useStore";
+import { useProducts, useIncrementViews, useIncrementOrderClicks } from "@/hooks/useProducts";
+import { useSettings } from "@/hooks/useSettings";
+import { openWhatsAppChat } from "@/lib/whatsapp";
 import StoreHeader from "@/components/store/StoreHeader";
 import StoreFooter from "@/components/store/StoreFooter";
 import placeholderImg from "@/assets/perfume-placeholder.jpg";
+
 const ProductDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
-  const { products, settings, incrementViews, incrementOrderClicks } = useStore();
+  const { data: products = [] } = useProducts();
+  const { data: settings } = useSettings();
+  const incrementViews = useIncrementViews();
+  const incrementOrderClicks = useIncrementOrderClicks();
   const product = products.find((p) => p.id === id);
   const [selectedImage, setSelectedImage] = useState(0);
 
   useEffect(() => {
-    if (id) incrementViews(id);
+    if (id) incrementViews.mutate(id);
   }, [id]);
 
   if (!product) {
