@@ -32,12 +32,12 @@ const ProductDetailsPage = () => {
   const images = product.images.length > 0 ? product.images : [placeholderImg];
 
   const handleWhatsApp = () => {
-    incrementOrderClicks(product.id);
-    const message = settings.whatsappTemplate
+    incrementOrderClicks.mutate(product.id);
+    const message = (settings?.whatsapp_template ?? "")
       .replace("{product_name}", product.name)
-      .replace("{price}", `$${product.price}`)
+      .replace("{price}", `${product.price}`)
       .replace("{product_id}", product.id);
-    <Link to={`https://wa.me/${settings.whatsappNumber}?text=${message}`}><Link/> 
+    openWhatsAppChat(settings?.whatsapp_number ?? "", message);
   };
 
   const nextImage = () => setSelectedImage((prev) => (prev + 1) % images.length);
