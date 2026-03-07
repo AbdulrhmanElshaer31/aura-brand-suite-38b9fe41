@@ -2,18 +2,24 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowLeft, MessageCircle, ChevronLeft, ChevronRight } from "lucide-react";
-import { useStore } from "@/store/useStore";
+import { useProducts, useIncrementViews, useIncrementOrderClicks } from "@/hooks/useProducts";
+import { useSettings } from "@/hooks/useSettings";
+import { openWhatsAppChat } from "@/lib/whatsapp";
 import StoreHeader from "@/components/store/StoreHeader";
 import StoreFooter from "@/components/store/StoreFooter";
 import placeholderImg from "@/assets/perfume-placeholder.jpg";
+
 const ProductDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
-  const { products, settings, incrementViews, incrementOrderClicks } = useStore();
+  const { data: products = [] } = useProducts();
+  const { data: settings } = useSettings();
+  const incrementViews = useIncrementViews();
+  const incrementOrderClicks = useIncrementOrderClicks();
   const product = products.find((p) => p.id === id);
   const [selectedImage, setSelectedImage] = useState(0);
 
   useEffect(() => {
-    if (id) incrementViews(id);
+    if (id) incrementViews.mutate(id);
   }, [id]);
 
   if (!product) {
@@ -32,18 +38,15 @@ const ProductDetailsPage = () => {
   const images = product.images.length > 0 ? product.images : [placeholderImg];
 
   const handleWhatsApp = () => {
-    incrementOrderClicks(product.id);
+    incrementOrderClicks.mutate(product.id);
 
-    const message = settings.whatsappTemplate
+    const template = settings?.whatsapp_template || "I'd like to order {product_name} - {price}";
+    const message = template
       .replace("{product_name}", product.name)
       .replace("{price}", `$${product.price}`)
       .replace("{product_id}", product.id);
 
-    const encodedMessage = encodeURIComponent(message);
-
-    const url = `https://wa.me/${settings.whatsappNumber}?text=${encodedMessage}`;
-
-    window.open(url, "_blank");
+    openWhatsAppChat(settings?.whatsapp_number || "", message);
   };
 
   const nextImage = () => setSelectedImage((prev) => (prev + 1) % images.length);
@@ -143,9 +146,9 @@ const ProductDetailsPage = () => {
             {/* Fragrance Notes */}
             <div className="bg-card border border-border rounded-xl p-6 space-y-6">
               <h3 className="font-heading text-2xl text-gradient-gold">Fragrance Notes</h3>
-              {noteSection("Top Notes", product.topNotes, "border-primary/40 text-primary")}
-              {noteSection("Middle Notes", product.middleNotes, "border-muted-foreground/30 text-muted-foreground")}
-              {noteSection("Base Notes", product.baseNotes, "border-border text-muted-foreground/80")}
+              {noteSection("Top Notes", product.top_notes, "border-primary/40 text-primary")}
+              {noteSection("Middle Notes", product.middle_notes, "border-muted-foreground/30 text-muted-foreground")}
+              {noteSection("Base Notes", product.base_notes, "border-border text-muted-foreground/80")}
             </div>
           </motion.div>
         </div>
