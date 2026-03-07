@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useSettings } from '@/hooks/useSettings';
 import { useIncrementOrderClicks, type Product } from '@/hooks/useProducts';
 import { useLanguage } from '@/i18n/LanguageContext';
-import { openWhatsAppChat } from '@/lib/whatsapp';
+import { buildWhatsAppUrl } from '@/lib/whatsapp';
 import placeholderImg from '@/assets/perfume-placeholder.jpg';
 
 interface QuickViewModalProps {
@@ -21,15 +21,12 @@ const QuickViewModal = ({ product, onClose }: QuickViewModalProps) => {
 
   const image = product.images.length > 0 ? product.images[0] : placeholderImg;
 
-  const handleWhatsApp = () => {
-    incrementClicks.mutate(product.id);
-    const message = settings.whatsapp_template
-      .replace('{product_name}', product.name)
-      .replace('{price}', `${product.price} ${t('currency')}`)
-      .replace('{product_id}', product.id);
+  const message = settings.whatsapp_template
+    .replace('{product_name}', product.name)
+    .replace('{price}', `${product.price} ${t('currency')}`)
+    .replace('{product_id}', product.id);
 
-    openWhatsAppChat(settings.whatsapp_number, message);
-  };
+  const whatsappUrl = buildWhatsAppUrl(settings.whatsapp_number, message);
 
   return (
     <AnimatePresence>
@@ -60,9 +57,15 @@ const QuickViewModal = ({ product, onClose }: QuickViewModalProps) => {
               <p className="text-muted-foreground text-sm flex-1 line-clamp-3 mb-4">{product.description}</p>
               <p className="text-primary font-heading text-3xl mb-6">{product.price} {t('currency')}</p>
               <div className="flex gap-3">
-                <button onClick={handleWhatsApp} className="flex-1 bg-gold-gradient text-primary-foreground py-3 rounded-lg font-body font-medium text-sm hover:shadow-gold transition-all">
+                <a
+                  href={whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => incrementClicks.mutate(product.id)}
+                  className="flex-1 bg-gold-gradient text-primary-foreground py-3 rounded-lg font-body font-medium text-sm text-center hover:shadow-gold transition-all"
+                >
                   {t('orderViaWhatsApp')}
-                </button>
+                </a>
                 <Link to={`/product/${product.id}`} onClick={onClose} className="flex-1 border border-primary text-primary py-3 rounded-lg font-body font-medium text-sm text-center hover:bg-primary hover:text-primary-foreground transition-all">
                   {t('fullDetails')}
                 </Link>
