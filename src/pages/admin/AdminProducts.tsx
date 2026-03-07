@@ -102,41 +102,43 @@ const AdminProducts = () => {
     }
   };
 
-  const inputClass = "w-full px-4 py-3 bg-background border border-border rounded-lg text-foreground font-body text-sm placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors";
+  const inputClass = "w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-background border border-border rounded-lg text-foreground font-body text-sm placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors";
   const labelClass = "text-muted-foreground font-body text-sm mb-1 block";
   const showForm = creating || editing;
 
   return (
     <AdminLayout>
-      <div className="flex items-center justify-between mb-8">
-        <h1 className="font-heading text-3xl text-foreground">{t('products')}</h1>
-        <button onClick={openCreate} className="bg-gold-gradient text-primary-foreground px-5 py-2.5 rounded-lg font-body text-sm font-medium flex items-center gap-2 hover:shadow-gold transition-all">
-          <Plus className="w-4 h-4" /> {t('addProduct')}
+      <div className="flex items-center justify-between mb-6 sm:mb-8 gap-3">
+        <h1 className="font-heading text-2xl sm:text-3xl text-foreground">{t('products')}</h1>
+        <button onClick={openCreate} className="bg-gold-gradient text-primary-foreground px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg font-body text-xs sm:text-sm font-medium flex items-center gap-2 hover:shadow-gold transition-all flex-shrink-0">
+          <Plus className="w-4 h-4" /> <span className="hidden sm:inline">{t('addProduct')}</span><span className="sm:hidden">{t('add')}</span>
         </button>
       </div>
 
       {!showForm && (
         <div className="space-y-3">
           {products.map((p) => (
-            <motion.div key={p.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-card border border-border rounded-xl p-5 flex items-center justify-between">
-              <div className="flex items-center gap-4">
+            <motion.div key={p.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-card border border-border rounded-xl p-3 sm:p-5 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-3 sm:gap-4 min-w-0 flex-1">
                 {p.images[0] ? (
-                  <img src={p.images[0]} alt={p.name} className="w-14 h-14 rounded-lg object-cover" />
+                  <img src={p.images[0]} alt={p.name} className="w-10 h-10 sm:w-14 sm:h-14 rounded-lg object-cover flex-shrink-0" />
                 ) : (
-                  <div className="w-14 h-14 rounded-lg bg-secondary flex items-center justify-center">
-                    <Package className="w-6 h-6 text-muted-foreground" />
+                  <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-lg bg-secondary flex items-center justify-center flex-shrink-0">
+                    <Package className="w-5 h-5 sm:w-6 sm:h-6 text-muted-foreground" />
                   </div>
                 )}
-                <div>
-                  <h3 className="font-body text-sm text-foreground font-medium">{p.name}</h3>
-                  <p className="text-muted-foreground text-xs font-body">{p.category} · {p.size} · {p.price} {t('currency')}</p>
+                <div className="min-w-0">
+                  <h3 className="font-body text-sm text-foreground font-medium truncate">{p.name}</h3>
+                  <p className="text-muted-foreground text-xs font-body truncate">{p.category} · {p.size} · {p.price} {t('currency')}</p>
                 </div>
               </div>
-              <div className="flex items-center gap-2">
-                {p.badge && (
-                  <span className="bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-body capitalize">{t(p.badge as any)}</span>
-                )}
-                <span className={`px-3 py-1 rounded-full text-xs font-body ${p.status === 'available' ? 'bg-green-500/10 text-green-400' : 'bg-destructive/10 text-destructive'}`}>
+              <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
+                <span className="hidden sm:inline-block">
+                  {p.badge && (
+                    <span className="bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-body capitalize">{t(p.badge as any)}</span>
+                  )}
+                </span>
+                <span className={`hidden sm:inline-block px-3 py-1 rounded-full text-xs font-body ${p.status === 'available' ? 'bg-green-500/10 text-green-400' : 'bg-destructive/10 text-destructive'}`}>
                   {p.status === 'available' ? t('available') : t('outOfStock')}
                 </span>
                 <button onClick={() => openEdit(p)} className="p-2 text-muted-foreground hover:text-primary transition-colors">
@@ -152,8 +154,8 @@ const AdminProducts = () => {
       )}
 
       {deleteConfirm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
-          <div className="bg-card border border-border rounded-xl p-6 max-w-sm w-full mx-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm p-4">
+          <div className="bg-card border border-border rounded-xl p-6 max-w-sm w-full">
             <h3 className="font-heading text-lg text-foreground mb-2">{t('deleteProduct')}</h3>
             <p className="text-muted-foreground font-body text-sm mb-6">{t('deleteConfirm')}</p>
             <div className="flex gap-3">
@@ -165,12 +167,12 @@ const AdminProducts = () => {
       )}
 
       {showForm && (
-        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-card border border-border rounded-xl p-6">
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-card border border-border rounded-xl p-4 sm:p-6">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="font-heading text-xl text-foreground">{editing ? t('editProduct') : t('newProduct')}</h2>
+            <h2 className="font-heading text-lg sm:text-xl text-foreground">{editing ? t('editProduct') : t('newProduct')}</h2>
             <button onClick={closeForm} className="text-muted-foreground hover:text-foreground"><X className="w-5 h-5" /></button>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
             <div><label className={labelClass}>{t('productName')}</label><input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className={inputClass} /></div>
             <div><label className={labelClass}>{t('price')} ({t('currency')})</label><input type="number" value={form.price} onChange={(e) => setForm({ ...form, price: Number(e.target.value) })} className={inputClass} /></div>
             <div><label className={labelClass}>{t('category')}</label>
@@ -190,22 +192,22 @@ const AdminProducts = () => {
               </select>
             </div>
           </div>
-          <div className="mt-5"><label className={labelClass}>{t('description')}</label>
+          <div className="mt-4 sm:mt-5"><label className={labelClass}>{t('description')}</label>
             <textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={3} className={inputClass} />
           </div>
 
-          <div className="mt-5">
+          <div className="mt-4 sm:mt-5">
             <label className={labelClass}>{t('productImages')}</label>
-            <div className="flex flex-wrap gap-3 mb-3">
+            <div className="flex flex-wrap gap-2 sm:gap-3 mb-3">
               {form.images.map((img, i) => (
-                <div key={i} className="relative w-24 h-24 rounded-lg overflow-hidden border border-border group">
+                <div key={i} className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-lg overflow-hidden border border-border group">
                   <img src={img} alt="" className="w-full h-full object-cover" />
                   <button onClick={() => removeImage(i)} className="absolute inset-0 bg-background/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
                     <X className="w-5 h-5 text-destructive" />
                   </button>
                 </div>
               ))}
-              <label className={`w-24 h-24 rounded-lg border-2 border-dashed border-border hover:border-primary/40 flex flex-col items-center justify-center cursor-pointer transition-colors ${uploading ? 'opacity-50 pointer-events-none' : ''}`}>
+              <label className={`w-20 h-20 sm:w-24 sm:h-24 rounded-lg border-2 border-dashed border-border hover:border-primary/40 flex flex-col items-center justify-center cursor-pointer transition-colors ${uploading ? 'opacity-50 pointer-events-none' : ''}`}>
                 <Upload className="w-5 h-5 text-muted-foreground mb-1" />
                 <span className="text-xs text-muted-foreground font-body">{uploading ? '...' : t('upload')}</span>
                 <input type="file" multiple accept="image/*" onChange={handleImageUpload} className="hidden" />
@@ -229,13 +231,13 @@ const AdminProducts = () => {
                 <div className="flex gap-2">
                   <input value={noteInputs[inputKey]} onChange={(e) => setNoteInputs({ ...noteInputs, [inputKey]: e.target.value })}
                     onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addNote(type, inputKey))} className={inputClass} />
-                  <button onClick={() => addNote(type, inputKey)} className="px-4 bg-secondary text-secondary-foreground rounded-lg font-body text-sm hover:bg-secondary/80 transition-colors">{t('add')}</button>
+                  <button onClick={() => addNote(type, inputKey)} className="px-3 sm:px-4 bg-secondary text-secondary-foreground rounded-lg font-body text-sm hover:bg-secondary/80 transition-colors flex-shrink-0">{t('add')}</button>
                 </div>
               </div>
             );
           })}
 
-          <div className="flex gap-3 mt-8">
+          <div className="flex gap-3 mt-6 sm:mt-8">
             <button onClick={closeForm} className="flex-1 border border-border text-muted-foreground py-3 rounded-lg font-body text-sm hover:bg-secondary transition-colors">{t('cancel')}</button>
             <button onClick={handleSave} disabled={addProduct.isPending || updateProduct.isPending}
               className="flex-1 bg-gold-gradient text-primary-foreground py-3 rounded-lg font-body text-sm font-medium hover:shadow-gold transition-all disabled:opacity-50">
