@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { ArrowLeft, MessageCircle, ChevronLeft, ChevronRight } from "lucide-react";
 import { useProducts, useIncrementViews, useIncrementOrderClicks } from "@/hooks/useProducts";
 import { useSettings } from "@/hooks/useSettings";
-import { openWhatsAppChat } from "@/lib/whatsapp";
+import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import StoreHeader from "@/components/store/StoreHeader";
 import StoreFooter from "@/components/store/StoreFooter";
 import placeholderImg from "@/assets/perfume-placeholder.jpg";
@@ -37,17 +37,13 @@ const ProductDetailsPage = () => {
 
   const images = product.images.length > 0 ? product.images : [placeholderImg];
 
-  const handleWhatsApp = () => {
-    incrementOrderClicks.mutate(product.id);
+  const template = settings?.whatsapp_template || "I'd like to order {product_name} - {price}";
+  const whatsappMessage = template
+    .replace("{product_name}", product.name)
+    .replace("{price}", `$${product.price}`)
+    .replace("{product_id}", product.id);
 
-    const template = settings?.whatsapp_template || "I'd like to order {product_name} - {price}";
-    const message = template
-      .replace("{product_name}", product.name)
-      .replace("{price}", `$${product.price}`)
-      .replace("{product_id}", product.id);
-
-    openWhatsAppChat(settings?.whatsapp_number || "", message);
-  };
+  const whatsappUrl = buildWhatsAppUrl(settings?.whatsapp_number || "", whatsappMessage);
 
   const nextImage = () => setSelectedImage((prev) => (prev + 1) % images.length);
   const prevImage = () => setSelectedImage((prev) => (prev - 1 + images.length) % images.length);
@@ -135,13 +131,16 @@ const ProductDetailsPage = () => {
             <p className="text-muted-foreground font-body leading-relaxed mb-4">{product.description}</p>
             <p className="text-muted-foreground/70 font-body text-sm mb-8">Size: {product.size}</p>
 
-            <button
-              onClick={handleWhatsApp}
+            <a
+              href={whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => incrementOrderClicks.mutate(product.id)}
               className="w-full bg-gold-gradient text-primary-foreground py-4 rounded-xl font-body font-semibold text-lg flex items-center justify-center gap-3 hover:shadow-gold-lg transition-all duration-300 hover:scale-[1.02] mb-10"
             >
               <MessageCircle className="w-5 h-5" />
               Order via WhatsApp
-            </button>
+            </a>
 
             {/* Fragrance Notes */}
             <div className="bg-card border border-border rounded-xl p-6 space-y-6">
