@@ -75,5 +75,3 @@ const ProductCard = ({ product, onQuickView }: ProductCardProps) => {
 };
 
 export default ProductCard;
-
-import { Link } from 'react-router-dom';
