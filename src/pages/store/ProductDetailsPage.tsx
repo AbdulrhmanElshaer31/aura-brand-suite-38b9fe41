@@ -38,12 +38,13 @@ const ProductDetailsPage = () => {
   const images = product.images.length > 0 ? product.images : [placeholderImg];
 
   const handleWhatsApp = () => {
-    incrementOrderClicks(product.id);
-    const message = settings.whatsappTemplate
+    incrementOrderClicks.mutate(product.id);
+    if (!settings) return;
+    const message = settings.whatsapp_template
       .replace("{product_name}", product.name)
-      .replace("{price}", `$${product.price}`)
+      .replace("{price}", `${product.price} EGP`)
       .replace("{product_id}", product.id);
-    window.open(`https://wa.me/${settings.whatsappNumber}?text=${message}`, "_blank");
+    openWhatsAppChat(settings.whatsapp_number, message);
   };
 
   const nextImage = () => setSelectedImage((prev) => (prev + 1) % images.length);
@@ -143,9 +144,9 @@ const ProductDetailsPage = () => {
             {/* Fragrance Notes */}
             <div className="bg-card border border-border rounded-xl p-6 space-y-6">
               <h3 className="font-heading text-2xl text-gradient-gold">Fragrance Notes</h3>
-              {noteSection("Top Notes", product.topNotes, "border-primary/40 text-primary")}
-              {noteSection("Middle Notes", product.middleNotes, "border-muted-foreground/30 text-muted-foreground")}
-              {noteSection("Base Notes", product.baseNotes, "border-border text-muted-foreground/80")}
+              {noteSection("Top Notes", product.top_notes, "border-primary/40 text-primary")}
+              {noteSection("Middle Notes", product.middle_notes, "border-muted-foreground/30 text-muted-foreground")}
+              {noteSection("Base Notes", product.base_notes, "border-border text-muted-foreground/80")}
             </div>
           </motion.div>
         </div>
