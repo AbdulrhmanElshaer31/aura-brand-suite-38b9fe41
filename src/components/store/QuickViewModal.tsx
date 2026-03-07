@@ -1,9 +1,9 @@
-import { useState } from 'react';
 import { X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Product } from '@/types';
-import { useStore } from '@/store/useStore';
+import { useSettings } from '@/hooks/useSettings';
+import { useIncrementOrderClicks, type Product } from '@/hooks/useProducts';
+import { useLanguage } from '@/i18n/LanguageContext';
 import placeholderImg from '@/assets/perfume-placeholder.jpg';
 
 interface QuickViewModalProps {
@@ -12,35 +12,32 @@ interface QuickViewModalProps {
 }
 
 const QuickViewModal = ({ product, onClose }: QuickViewModalProps) => {
-  const { settings, incrementOrderClicks } = useStore();
+  const { data: settings } = useSettings();
+  const incrementClicks = useIncrementOrderClicks();
+  const { t } = useLanguage();
 
-  if (!product) return null;
+  if (!product || !settings) return null;
 
   const image = product.images.length > 0 ? product.images[0] : placeholderImg;
 
   const handleWhatsApp = () => {
-    incrementOrderClicks(product.id);
-    const message = settings.whatsappTemplate
+    incrementClicks.mutate(product.id);
+    const message = settings.whatsapp_template
       .replace('{product_name}', product.name)
-      .replace('{price}', `$${product.price}`)
+      .replace('{price}', `${product.price} ${t('currency')}`)
       .replace('{product_id}', product.id);
-    const url = `https://wa.me/${settings.whatsappNumber}?text=${encodeURIComponent(message)}`;
-    window.open(url, '_blank');
+    window.open(`https://wa.me/${settings.whatsapp_number}?text=${encodeURIComponent(message)}`, '_blank');
   };
 
   return (
     <AnimatePresence>
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
+        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
         className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm p-4"
         onClick={onClose}
       >
         <motion.div
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.9, opacity: 0 }}
+          initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }}
           className="bg-card border border-border rounded-xl max-w-2xl w-full overflow-hidden shadow-gold-lg"
           onClick={(e) => e.stopPropagation()}
         >
@@ -59,20 +56,13 @@ const QuickViewModal = ({ product, onClose }: QuickViewModalProps) => {
                 </button>
               </div>
               <p className="text-muted-foreground text-sm flex-1 line-clamp-3 mb-4">{product.description}</p>
-              <p className="text-primary font-heading text-3xl mb-6">${product.price}</p>
+              <p className="text-primary font-heading text-3xl mb-6">{product.price} {t('currency')}</p>
               <div className="flex gap-3">
-                <button
-                  onClick={handleWhatsApp}
-                  className="flex-1 bg-gold-gradient text-primary-foreground py-3 rounded-lg font-body font-medium text-sm hover:shadow-gold transition-all"
-                >
-                  Order via WhatsApp
+                <button onClick={handleWhatsApp} className="flex-1 bg-gold-gradient text-primary-foreground py-3 rounded-lg font-body font-medium text-sm hover:shadow-gold transition-all">
+                  {t('orderViaWhatsApp')}
                 </button>
-                <Link
-                  to={`/product/${product.id}`}
-                  onClick={onClose}
-                  className="flex-1 border border-primary text-primary py-3 rounded-lg font-body font-medium text-sm text-center hover:bg-primary hover:text-primary-foreground transition-all"
-                >
-                  Full Details
+                <Link to={`/product/${product.id}`} onClick={onClose} className="flex-1 border border-primary text-primary py-3 rounded-lg font-body font-medium text-sm text-center hover:bg-primary hover:text-primary-foreground transition-all">
+                  {t('fullDetails')}
                 </Link>
               </div>
             </div>
