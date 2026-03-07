@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useSettings } from '@/hooks/useSettings';
 import { useIncrementOrderClicks, type Product } from '@/hooks/useProducts';
 import { useLanguage } from '@/i18n/LanguageContext';
+import { openWhatsAppChat } from '@/lib/whatsapp';
 import placeholderImg from '@/assets/perfume-placeholder.jpg';
 
 interface QuickViewModalProps {
@@ -26,7 +27,8 @@ const QuickViewModal = ({ product, onClose }: QuickViewModalProps) => {
       .replace('{product_name}', product.name)
       .replace('{price}', `${product.price} ${t('currency')}`)
       .replace('{product_id}', product.id);
-    window.open(`https://wa.me/${settings.whatsapp_number}?text=${encodeURIComponent(message)}`, '_blank');
+
+    openWhatsAppChat(settings.whatsapp_number, message);
   };
 
   return (
@@ -74,3 +76,4 @@ const QuickViewModal = ({ product, onClose }: QuickViewModalProps) => {
 };
 
 export default QuickViewModal;
+

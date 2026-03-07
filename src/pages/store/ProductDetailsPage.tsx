@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { useProducts, useIncrementViews, useIncrementOrderClicks } from '@/hooks/useProducts';
 import { useSettings } from '@/hooks/useSettings';
 import { useLanguage } from '@/i18n/LanguageContext';
+import { openWhatsAppChat } from '@/lib/whatsapp';
 import StoreHeader from '@/components/store/StoreHeader';
 import StoreFooter from '@/components/store/StoreFooter';
 import placeholderImg from '@/assets/perfume-placeholder.jpg';
@@ -44,7 +45,8 @@ const ProductDetailsPage = () => {
       .replace('{product_name}', product.name)
       .replace('{price}', `${product.price} ${t('currency')}`)
       .replace('{product_id}', product.id);
-    window.open(`https://wa.me/${settings.whatsapp_number}?text=${encodeURIComponent(message)}`, '_blank');
+
+    openWhatsAppChat(settings.whatsapp_number, message);
   };
 
   const nextImage = () => setSelectedImage((prev) => (prev + 1) % images.length);
@@ -131,3 +133,4 @@ const ProductDetailsPage = () => {
 };
 
 export default ProductDetailsPage;
+
