@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Plus, Pencil, Trash2, X, Upload } from 'lucide-react';
+import { Plus, Pencil, Trash2, X, Upload, Package } from 'lucide-react';
 import { useStore } from '@/store/useStore';
 import AdminLayout from '@/components/admin/AdminLayout';
 import { Product } from '@/types';
@@ -281,5 +281,3 @@ const AdminProducts = () => {
 };
 
 export default AdminProducts;
-
-import { Package } from 'lucide-react';
