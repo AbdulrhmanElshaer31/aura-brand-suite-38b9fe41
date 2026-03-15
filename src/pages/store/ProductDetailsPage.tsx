@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, MessageCircle, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowLeft, MessageCircle, ChevronLeft, ChevronRight, ShoppingBag } from "lucide-react";
 import { useProducts, useIncrementViews, useIncrementOrderClicks } from "@/hooks/useProducts";
 import { useSettings } from "@/hooks/useSettings";
+import { useCartStore } from "@/store/useCartStore";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
+import { useLanguage } from "@/i18n/LanguageContext";
+import { toast } from "@/hooks/use-toast";
 import StoreHeader from "@/components/store/StoreHeader";
 import StoreFooter from "@/components/store/StoreFooter";
 import placeholderImg from "@/assets/perfume-placeholder.jpg";
