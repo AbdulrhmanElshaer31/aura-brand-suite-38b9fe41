@@ -22,7 +22,6 @@ const ProductDetailsPage = () => {
   const { t } = useLanguage();
   const product = products.find((p) => p.id === id);
   const [selectedImage, setSelectedImage] = useState(0);
-  const [selectedImage, setSelectedImage] = useState(0);
 
   useEffect(() => {
     if (id) incrementViews.mutate(id);

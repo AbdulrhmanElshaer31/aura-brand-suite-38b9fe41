@@ -8,7 +8,6 @@ import { useCartStore } from '@/store/useCartStore';
 import { buildWhatsAppUrl } from '@/lib/whatsapp';
 import { toast } from '@/hooks/use-toast';
 import placeholderImg from '@/assets/perfume-placeholder.jpg';
-import placeholderImg from '@/assets/perfume-placeholder.jpg';
 
 interface QuickViewModalProps {
   product: Product | null;
