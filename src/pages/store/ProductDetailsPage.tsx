@@ -137,16 +137,25 @@ const ProductDetailsPage = () => {
             <p className="text-muted-foreground font-body leading-relaxed mb-4 text-sm sm:text-base">{product.description}</p>
             <p className="text-muted-foreground/70 font-body text-sm mb-6 sm:mb-8">Size: {product.size}</p>
 
-            <a
-              href={whatsappUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => incrementOrderClicks.mutate(product.id)}
-              className="w-full bg-gold-gradient text-primary-foreground py-3 sm:py-4 rounded-xl font-body font-semibold text-base sm:text-lg flex items-center justify-center gap-3 hover:shadow-gold-lg transition-all duration-300 hover:scale-[1.02] mb-8 sm:mb-10"
-            >
-              <MessageCircle className="w-5 h-5" />
-              Order via WhatsApp
-            </a>
+            <div className="flex flex-col gap-3 mb-8 sm:mb-10">
+              <button
+                onClick={() => { addItem(product); toast({ title: t('addedToCart') }); }}
+                className="w-full bg-gold-gradient text-primary-foreground py-3 sm:py-4 rounded-xl font-body font-semibold text-base sm:text-lg flex items-center justify-center gap-3 hover:shadow-gold-lg transition-all duration-300 hover:scale-[1.02]"
+              >
+                <ShoppingBag className="w-5 h-5" />
+                {t('addToCart')}
+              </button>
+              <a
+                href={whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => incrementOrderClicks.mutate(product.id)}
+                className="w-full border border-primary text-primary py-3 sm:py-4 rounded-xl font-body font-semibold text-base sm:text-lg flex items-center justify-center gap-3 hover:bg-primary hover:text-primary-foreground transition-all duration-300"
+              >
+                <MessageCircle className="w-5 h-5" />
+                {t('orderViaWhatsApp')}
+              </a>
+            </div>
 
             {/* Fragrance Notes */}
             <div className="bg-card border border-border rounded-xl p-4 sm:p-6 space-y-4 sm:space-y-6">

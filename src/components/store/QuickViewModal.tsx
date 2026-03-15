@@ -60,19 +60,28 @@ const QuickViewModal = ({ product, onClose }: QuickViewModalProps) => {
               </div>
               <p className="text-muted-foreground text-sm flex-1 line-clamp-3 mb-4">{product.description}</p>
               <p className="text-primary font-heading text-3xl mb-6">{product.price} {t('currency')}</p>
-              <div className="flex gap-3">
-                <a
-                  href={whatsappUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => incrementClicks.mutate(product.id)}
-                  className="flex-1 bg-gold-gradient text-primary-foreground py-3 rounded-lg font-body font-medium text-sm text-center hover:shadow-gold transition-all"
+              <div className="flex flex-col gap-3">
+                <button
+                  onClick={() => { addItem(product); toast({ title: t('addedToCart') }); }}
+                  className="flex-1 bg-gold-gradient text-primary-foreground py-3 rounded-lg font-body font-medium text-sm text-center hover:shadow-gold transition-all flex items-center justify-center gap-2"
                 >
-                  {t('orderViaWhatsApp')}
-                </a>
-                <Link to={`/product/${product.id}`} onClick={onClose} className="flex-1 border border-primary text-primary py-3 rounded-lg font-body font-medium text-sm text-center hover:bg-primary hover:text-primary-foreground transition-all">
-                  {t('fullDetails')}
-                </Link>
+                  <ShoppingBag className="w-4 h-4" />
+                  {t('addToCart')}
+                </button>
+                <div className="flex gap-3">
+                  <a
+                    href={whatsappUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => incrementClicks.mutate(product.id)}
+                    className="flex-1 border border-primary text-primary py-3 rounded-lg font-body font-medium text-sm text-center hover:bg-primary hover:text-primary-foreground transition-all"
+                  >
+                    {t('orderViaWhatsApp')}
+                  </a>
+                  <Link to={`/product/${product.id}`} onClick={onClose} className="flex-1 border border-border text-muted-foreground py-3 rounded-lg font-body font-medium text-sm text-center hover:border-primary/40 hover:text-foreground transition-all">
+                    {t('fullDetails')}
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
