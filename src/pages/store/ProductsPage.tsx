@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Search } from 'lucide-react';
 import { useProducts, type Product } from '@/hooks/useProducts';
+import { useCategories } from '@/hooks/useCategories';
 import { useLanguage } from '@/i18n/LanguageContext';
 import StoreHeader from '@/components/store/StoreHeader';
 import StoreFooter from '@/components/store/StoreFooter';
@@ -11,7 +12,8 @@ import { motion } from 'framer-motion';
 
 const ProductsPage = () => {
   const { data: products = [] } = useProducts();
-  const { t } = useLanguage();
+  const { data: categories = [] } = useCategories();
+  const { t, lang } = useLanguage();
   const [searchParams, setSearchParams] = useSearchParams();
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
   const [search, setSearch] = useState('');
@@ -34,7 +36,9 @@ const ProductsPage = () => {
     setSearchParams(searchParams);
   };
 
-  const categories = ['all', 'fresh', 'sweet', 'woody'] as const;
+  const getCategoryLabel = (cat: { name: string; name_ar: string }) => {
+    return lang === 'ar' ? cat.name_ar : cat.name;
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -52,10 +56,14 @@ const ProductsPage = () => {
               className="w-full ps-10 pe-4 py-3 bg-card border border-border rounded-lg text-foreground font-body text-sm placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors" />
           </div>
           <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+            <button onClick={() => setCategory('all')}
+              className={`px-4 sm:px-5 py-2 rounded-full text-xs sm:text-sm font-body capitalize transition-all ${categoryFilter === 'all' ? 'bg-gold-gradient text-primary-foreground shadow-gold' : 'bg-card border border-border text-muted-foreground hover:border-primary/40'}`}>
+              {t('all')}
+            </button>
             {categories.map((cat) => (
-              <button key={cat} onClick={() => setCategory(cat)}
-                className={`px-4 sm:px-5 py-2 rounded-full text-xs sm:text-sm font-body capitalize transition-all ${categoryFilter === cat ? 'bg-gold-gradient text-primary-foreground shadow-gold' : 'bg-card border border-border text-muted-foreground hover:border-primary/40'}`}>
-                {t(cat)}
+              <button key={cat.id} onClick={() => setCategory(cat.name)}
+                className={`px-4 sm:px-5 py-2 rounded-full text-xs sm:text-sm font-body capitalize transition-all ${categoryFilter === cat.name ? 'bg-gold-gradient text-primary-foreground shadow-gold' : 'bg-card border border-border text-muted-foreground hover:border-primary/40'}`}>
+                {getCategoryLabel(cat)}
               </button>
             ))}
             <select value={sort} onChange={(e) => setSort(e.target.value)}

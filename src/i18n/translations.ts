@@ -124,6 +124,14 @@ export const translations = {
     passwordTooShort: 'Password must be at least 4 characters',
     incorrectPassword: 'Current password is incorrect',
     currency: 'EGP',
+    manageCategories: 'Manage Categories',
+    categoryName: 'Category Name (English)',
+    categoryNameAr: 'Category Name (Arabic)',
+    addCategory: 'Add Category',
+    defaultCategory: 'Default',
+    categoryExists: 'Category already exists',
+    categoryAdded: 'Category added successfully',
+    categoryDeleted: 'Category deleted',
   },
   ar: {
     // Navigation
@@ -250,6 +258,14 @@ export const translations = {
     passwordTooShort: 'كلمة المرور يجب أن تكون 4 أحرف على الأقل',
     incorrectPassword: 'كلمة المرور الحالية غير صحيحة',
     currency: 'ج.م',
+    manageCategories: 'إدارة الفئات',
+    categoryName: 'اسم الفئة (إنجليزي)',
+    categoryNameAr: 'اسم الفئة (عربي)',
+    addCategory: 'إضافة فئة',
+    defaultCategory: 'أساسي',
+    categoryExists: 'الفئة موجودة بالفعل',
+    categoryAdded: 'تمت إضافة الفئة بنجاح',
+    categoryDeleted: 'تم حذف الفئة',
   },
 } as const;
 

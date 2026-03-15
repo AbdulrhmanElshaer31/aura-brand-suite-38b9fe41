@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Sparkles, Leaf, TreePine } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 import { useProducts, type Product } from '@/hooks/useProducts';
 import { useSettings } from '@/hooks/useSettings';
+import { useCategories } from '@/hooks/useCategories';
 import { useLanguage } from '@/i18n/LanguageContext';
 import StoreHeader from '@/components/store/StoreHeader';
 import StoreFooter from '@/components/store/StoreFooter';
@@ -21,18 +22,13 @@ const fadeUp = {
 const LandingPage = () => {
   const { data: products = [] } = useProducts();
   const { data: settings } = useSettings();
-  const { t } = useLanguage();
+  const { data: categories = [] } = useCategories();
+  const { t, lang } = useLanguage();
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
 
   const available = products.filter((p) => p.status === 'available');
   const featured = available.filter((p) => p.badge === 'new' || p.badge === 'limited').slice(0, 3);
   const bestSellers = available.filter((p) => p.badge === 'best_seller').slice(0, 3);
-
-  const categories = [
-    { key: 'fresh' as const, icon: Leaf },
-    { key: 'sweet' as const, icon: Sparkles },
-    { key: 'woody' as const, icon: TreePine },
-  ];
 
   return (
     <div className="min-h-screen bg-background">
@@ -95,11 +91,10 @@ const LandingPage = () => {
         </motion.div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8">
           {categories.map((cat, i) => (
-            <motion.div key={cat.key} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.15 }}>
-              <Link to={`/products?category=${cat.key}`} className="block bg-card border border-border rounded-xl p-8 sm:p-10 text-center hover:border-primary/40 hover:shadow-gold transition-all duration-500 group">
-                <cat.icon className="w-8 h-8 sm:w-10 sm:h-10 mx-auto mb-4 text-primary group-hover:scale-110 transition-transform" />
-                <h3 className="font-heading text-xl sm:text-2xl text-foreground mb-2">{t(cat.key)}</h3>
-                <p className="text-muted-foreground text-xs sm:text-sm font-body">{t(`${cat.key}Desc` as any)}</p>
+            <motion.div key={cat.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.15 }}>
+              <Link to={`/products?category=${cat.name}`} className="block bg-card border border-border rounded-xl p-8 sm:p-10 text-center hover:border-primary/40 hover:shadow-gold transition-all duration-500 group">
+                <Sparkles className="w-8 h-8 sm:w-10 sm:h-10 mx-auto mb-4 text-primary group-hover:scale-110 transition-transform" />
+                <h3 className="font-heading text-xl sm:text-2xl text-foreground mb-2 capitalize">{lang === 'ar' ? cat.name_ar : cat.name}</h3>
               </Link>
             </motion.div>
           ))}

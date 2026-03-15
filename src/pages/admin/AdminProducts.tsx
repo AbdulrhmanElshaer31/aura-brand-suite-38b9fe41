@@ -2,16 +2,20 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Plus, Pencil, Trash2, X, Upload, Package } from 'lucide-react';
 import { useProducts, useAddProduct, useUpdateProduct, useDeleteProduct, uploadProductImage, type Product } from '@/hooks/useProducts';
+import { useCategories, useAddCategory, useDeleteCategory } from '@/hooks/useCategories';
 import { useLanguage } from '@/i18n/LanguageContext';
 import AdminLayout from '@/components/admin/AdminLayout';
 import { toast } from 'sonner';
 
 const AdminProducts = () => {
   const { data: products = [] } = useProducts();
+  const { data: categories = [] } = useCategories();
   const addProduct = useAddProduct();
   const updateProduct = useUpdateProduct();
   const deleteProduct = useDeleteProduct();
-  const { t } = useLanguage();
+  const addCategory = useAddCategory();
+  const deleteCategoryMut = useDeleteCategory();
+  const { t, lang } = useLanguage();
 
   const [editing, setEditing] = useState<Product | null>(null);
   const [creating, setCreating] = useState(false);
@@ -23,9 +27,12 @@ const AdminProducts = () => {
   const [noteInputs, setNoteInputs] = useState({ top: '', middle: '', base: '' });
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
+  const [showCategoryManager, setShowCategoryManager] = useState(false);
+  const [newCatName, setNewCatName] = useState('');
+  const [newCatNameAr, setNewCatNameAr] = useState('');
 
   const openCreate = () => {
-    setForm({ name: '', description: '', price: 0, category: 'fresh', size: '50ml', status: 'available', badge: '', images: [], top_notes: [], middle_notes: [], base_notes: [] });
+    setForm({ name: '', description: '', price: 0, category: categories[0]?.name || 'fresh', size: '50ml', status: 'available', badge: '', images: [], top_notes: [], middle_notes: [], base_notes: [] });
     setNoteInputs({ top: '', middle: '', base: '' });
     setCreating(true);
     setEditing(null);
@@ -102,6 +109,33 @@ const AdminProducts = () => {
     }
   };
 
+  const handleAddCategory = async () => {
+    const name = newCatName.trim().toLowerCase();
+    const nameAr = newCatNameAr.trim();
+    if (!name || !nameAr) return;
+    if (categories.some((c) => c.name === name)) {
+      toast.error(t('categoryExists'));
+      return;
+    }
+    try {
+      await addCategory.mutateAsync({ name, name_ar: nameAr });
+      toast.success(t('categoryAdded'));
+      setNewCatName('');
+      setNewCatNameAr('');
+    } catch {
+      toast.error('Error adding category');
+    }
+  };
+
+  const handleDeleteCategory = async (id: string) => {
+    try {
+      await deleteCategoryMut.mutateAsync(id);
+      toast.success(t('categoryDeleted'));
+    } catch {
+      toast.error('Error deleting category');
+    }
+  };
+
   const inputClass = "w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-background border border-border rounded-lg text-foreground font-body text-sm placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-colors";
   const labelClass = "text-muted-foreground font-body text-sm mb-1 block";
   const showForm = creating || editing;
@@ -110,10 +144,43 @@ const AdminProducts = () => {
     <AdminLayout>
       <div className="flex items-center justify-between mb-6 sm:mb-8 gap-3">
         <h1 className="font-heading text-2xl sm:text-3xl text-foreground">{t('products')}</h1>
-        <button onClick={openCreate} className="bg-gold-gradient text-primary-foreground px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg font-body text-xs sm:text-sm font-medium flex items-center gap-2 hover:shadow-gold transition-all flex-shrink-0">
-          <Plus className="w-4 h-4" /> <span className="hidden sm:inline">{t('addProduct')}</span><span className="sm:hidden">{t('add')}</span>
-        </button>
+        <div className="flex gap-2">
+          <button onClick={() => setShowCategoryManager(!showCategoryManager)} className="border border-border text-muted-foreground px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg font-body text-xs sm:text-sm hover:border-primary/40 transition-colors flex-shrink-0">
+            {t('manageCategories')}
+          </button>
+          <button onClick={openCreate} className="bg-gold-gradient text-primary-foreground px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg font-body text-xs sm:text-sm font-medium flex items-center gap-2 hover:shadow-gold transition-all flex-shrink-0">
+            <Plus className="w-4 h-4" /> <span className="hidden sm:inline">{t('addProduct')}</span><span className="sm:hidden">{t('add')}</span>
+          </button>
+        </div>
       </div>
+
+      {/* Category Manager */}
+      {showCategoryManager && (
+        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="bg-card border border-border rounded-xl p-4 sm:p-6 mb-6">
+          <h2 className="font-heading text-lg text-foreground mb-4">{t('manageCategories')}</h2>
+          <div className="flex flex-wrap gap-2 mb-4">
+            {categories.map((cat) => (
+              <span key={cat.id} className="flex items-center gap-2 bg-secondary text-secondary-foreground px-3 py-1.5 rounded-full text-xs sm:text-sm font-body capitalize">
+                {lang === 'ar' ? cat.name_ar : cat.name}
+                {cat.is_default && <span className="text-primary text-[10px]">({t('defaultCategory')})</span>}
+                {!cat.is_default && (
+                  <button onClick={() => handleDeleteCategory(cat.id)} className="hover:text-destructive transition-colors">
+                    <X className="w-3 h-3" />
+                  </button>
+                )}
+              </span>
+            ))}
+          </div>
+          <div className="flex flex-col sm:flex-row gap-2">
+            <input value={newCatName} onChange={(e) => setNewCatName(e.target.value)} placeholder={t('categoryName')} className={inputClass} />
+            <input value={newCatNameAr} onChange={(e) => setNewCatNameAr(e.target.value)} placeholder={t('categoryNameAr')} className={inputClass} />
+            <button onClick={handleAddCategory} disabled={addCategory.isPending}
+              className="px-4 py-2.5 bg-gold-gradient text-primary-foreground rounded-lg font-body text-sm font-medium hover:shadow-gold transition-all disabled:opacity-50 flex-shrink-0 whitespace-nowrap">
+              {t('addCategory')}
+            </button>
+          </div>
+        </motion.div>
+      )}
 
       {!showForm && (
         <div className="space-y-3">
@@ -177,7 +244,9 @@ const AdminProducts = () => {
             <div><label className={labelClass}>{t('price')} ({t('currency')})</label><input type="number" value={form.price} onChange={(e) => setForm({ ...form, price: Number(e.target.value) })} className={inputClass} /></div>
             <div><label className={labelClass}>{t('category')}</label>
               <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} className={inputClass}>
-                <option value="fresh">{t('fresh')}</option><option value="sweet">{t('sweet')}</option><option value="woody">{t('woody')}</option>
+                {categories.map((cat) => (
+                  <option key={cat.id} value={cat.name}>{lang === 'ar' ? cat.name_ar : cat.name}</option>
+                ))}
               </select>
             </div>
             <div><label className={labelClass}>{t('size')}</label><input value={form.size} onChange={(e) => setForm({ ...form, size: e.target.value })} className={inputClass} /></div>
