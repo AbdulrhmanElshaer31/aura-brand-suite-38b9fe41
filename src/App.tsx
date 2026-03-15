@@ -8,6 +8,7 @@ import { useAdminStore } from "@/store/useAdminStore";
 import LandingPage from "./pages/store/LandingPage";
 import ProductsPage from "./pages/store/ProductsPage";
 import ProductDetailsPage from "./pages/store/ProductDetailsPage";
+import CartPage from "./pages/store/CartPage";
 import AdminLogin from "./pages/admin/AdminLogin";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminProducts from "./pages/admin/AdminProducts";
