@@ -1,10 +1,13 @@
-import { X } from 'lucide-react';
+import { X, ShoppingBag } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSettings } from '@/hooks/useSettings';
 import { useIncrementOrderClicks, type Product } from '@/hooks/useProducts';
 import { useLanguage } from '@/i18n/LanguageContext';
+import { useCartStore } from '@/store/useCartStore';
 import { buildWhatsAppUrl } from '@/lib/whatsapp';
+import { toast } from '@/hooks/use-toast';
+import placeholderImg from '@/assets/perfume-placeholder.jpg';
 import placeholderImg from '@/assets/perfume-placeholder.jpg';
 
 interface QuickViewModalProps {
