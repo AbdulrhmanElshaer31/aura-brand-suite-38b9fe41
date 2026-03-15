@@ -258,6 +258,14 @@ export const translations = {
     passwordTooShort: 'كلمة المرور يجب أن تكون 4 أحرف على الأقل',
     incorrectPassword: 'كلمة المرور الحالية غير صحيحة',
     currency: 'ج.م',
+    manageCategories: 'إدارة الفئات',
+    categoryName: 'اسم الفئة (إنجليزي)',
+    categoryNameAr: 'اسم الفئة (عربي)',
+    addCategory: 'إضافة فئة',
+    defaultCategory: 'أساسي',
+    categoryExists: 'الفئة موجودة بالفعل',
+    categoryAdded: 'تمت إضافة الفئة بنجاح',
+    categoryDeleted: 'تم حذف الفئة',
   },
 } as const;
 
