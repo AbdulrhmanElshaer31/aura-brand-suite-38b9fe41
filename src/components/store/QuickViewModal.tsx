@@ -18,6 +18,7 @@ interface QuickViewModalProps {
 const QuickViewModal = ({ product, onClose }: QuickViewModalProps) => {
   const { data: settings } = useSettings();
   const incrementClicks = useIncrementOrderClicks();
+  const addItem = useCartStore((s) => s.addItem);
   const { t } = useLanguage();
 
   if (!product || !settings) return null;
