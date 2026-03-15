@@ -8,6 +8,7 @@ import { useAdminStore } from "@/store/useAdminStore";
 import LandingPage from "./pages/store/LandingPage";
 import ProductsPage from "./pages/store/ProductsPage";
 import ProductDetailsPage from "./pages/store/ProductDetailsPage";
+import CartPage from "./pages/store/CartPage";
 import AdminLogin from "./pages/admin/AdminLogin";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminProducts from "./pages/admin/AdminProducts";
@@ -33,6 +34,7 @@ const App = () => (
             <Route path="/" element={<LandingPage />} />
             <Route path="/products" element={<ProductsPage />} />
             <Route path="/product/:id" element={<ProductDetailsPage />} />
+            <Route path="/cart" element={<CartPage />} />
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin/dashboard" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
             <Route path="/admin/products" element={<AdminRoute><AdminProducts /></AdminRoute>} />
