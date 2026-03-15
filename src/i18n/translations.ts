@@ -124,6 +124,14 @@ export const translations = {
     passwordTooShort: 'Password must be at least 4 characters',
     incorrectPassword: 'Current password is incorrect',
     currency: 'EGP',
+    manageCategories: 'Manage Categories',
+    categoryName: 'Category Name (English)',
+    categoryNameAr: 'Category Name (Arabic)',
+    addCategory: 'Add Category',
+    defaultCategory: 'Default',
+    categoryExists: 'Category already exists',
+    categoryAdded: 'Category added successfully',
+    categoryDeleted: 'Category deleted',
   },
   ar: {
     // Navigation
