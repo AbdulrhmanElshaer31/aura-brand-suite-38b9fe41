@@ -18,7 +18,10 @@ const ProductDetailsPage = () => {
   const { data: settings } = useSettings();
   const incrementViews = useIncrementViews();
   const incrementOrderClicks = useIncrementOrderClicks();
+  const addItem = useCartStore((s) => s.addItem);
+  const { t } = useLanguage();
   const product = products.find((p) => p.id === id);
+  const [selectedImage, setSelectedImage] = useState(0);
   const [selectedImage, setSelectedImage] = useState(0);
 
   useEffect(() => {
