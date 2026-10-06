@@ -24,7 +24,7 @@ const ProductsPage = () => {
   const filtered = useMemo(() => {
     let result = products.filter((p) => p.status === 'available');
     if (categoryFilter !== 'all') result = result.filter((p) => p.category === categoryFilter);
-    if (search) result = result.filter((p) => p.name.toLowerCase().includes(search.toLowerCase()));
+    if (search) result = result.filter((p) => (p.name + ' ' + p.name_ar).toLowerCase().includes(search.toLowerCase()));
     if (sort === 'price_asc') result.sort((a, b) => a.price - b.price);
     if (sort === 'price_desc') result.sort((a, b) => b.price - a.price);
     if (sort === 'newest') result.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());

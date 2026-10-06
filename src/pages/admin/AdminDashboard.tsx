@@ -80,8 +80,8 @@ const AdminDashboard = () => {
           {topViewed.map((p) => (
             <div key={p.id} className="flex items-center justify-between py-3 border-b border-border last:border-0">
               <div className="min-w-0 flex-1">
-                <p className="font-body text-sm text-foreground truncate">{p.name}</p>
-                <p className="font-body text-xs text-muted-foreground">{p.category} · {p.size}</p>
+                <p className="font-body text-sm text-foreground truncate">{p.name_ar || p.name}</p>
+                <p className="font-body text-xs text-muted-foreground">{p.category} · {p.prep_time}</p>
               </div>
               <div className="text-end flex-shrink-0 ms-4">
                 <p className="font-body text-sm text-primary">{p.views} {t('views')}</p>

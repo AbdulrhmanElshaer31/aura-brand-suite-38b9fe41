@@ -14,8 +14,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        heading: ['"Playfair Display"', 'serif'],
-        body: ['Poppins', 'sans-serif'],
+        heading: ['"Aref Ruqaa"', 'serif'],
+        body: ['Cairo', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",

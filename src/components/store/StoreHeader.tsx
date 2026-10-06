@@ -19,7 +19,7 @@ const StoreHeader = () => {
             <img src={settings.logo_url} alt={settings.brand_name} className="h-8 w-8 object-contain flex-shrink-0" />
           )}
           <span className="font-heading text-lg sm:text-xl tracking-widest text-gradient-gold truncate">
-            {settings?.brand_name || 'MAISON ÉLÉGANCE'}
+            {settings?.brand_name || 'ويزو فود'}
           </span>
         </Link>
 
