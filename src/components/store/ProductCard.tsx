@@ -1,78 +1,71 @@
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { Eye, ShoppingBag } from 'lucide-react';
+import { Eye, Clock, Plus } from 'lucide-react';
+import { toast } from 'sonner';
+import type { Product } from '@/hooks/useProducts';
 import { useLanguage } from '@/i18n/LanguageContext';
 import { useCartStore } from '@/store/useCartStore';
-import placeholderImg from '@/assets/perfume-placeholder.jpg';
-import type { Product } from '@/hooks/useProducts';
-import { toast } from '@/hooks/use-toast';
+import { dishName, getSizes, minPrice } from '@/lib/food';
+import placeholder from '@/assets/perfume-placeholder.jpg';
 
-interface ProductCardProps {
-  product: Product;
-  onQuickView?: (product: Product) => void;
-}
+interface Props { product: Product; onQuickView?: (p: Product) => void }
 
-const badgeStyles: Record<string, string> = {
-  new: 'bg-gold-gradient text-primary-foreground',
-  best_seller: 'bg-gold-gradient text-primary-foreground',
-  limited: 'bg-destructive text-destructive-foreground',
-};
-
-const ProductCard = ({ product, onQuickView }: ProductCardProps) => {
-  const { t } = useLanguage();
+const ProductCard = ({ product, onQuickView }: Props) => {
+  const { t, lang } = useLanguage();
   const addItem = useCartStore((s) => s.addItem);
-  const image = product.images.length > 0 ? product.images[0] : placeholderImg;
-  const badgeKey = product.badge as 'new' | 'best_seller' | 'limited' | undefined;
+  const sizes = getSizes(product);
+  const out = product.status !== 'available';
 
-  const handleAddToCart = (e: React.MouseEvent) => {
-    e.preventDefault();
-    addItem(product);
-    toast({ title: t('addedToCart') });
+  const quickAdd = () => {
+    if (sizes.length > 1 && onQuickView) return onQuickView(product);
+    addItem(product, sizes[0].name, sizes[0].price);
+    toast.success(t('addedToCart'));
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5 }}
-      className="group relative bg-card rounded-lg overflow-hidden border border-border hover:border-primary/30 transition-all duration-500 hover:shadow-gold"
-    >
+    <div className="reveal group bg-card rounded-3xl overflow-hidden border border-border hover:shadow-gold-lg hover:-translate-y-1 transition-all duration-500 flex flex-col">
       <div className="relative aspect-square overflow-hidden">
-        <img src={image} alt={product.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-        {badgeKey && badgeStyles[badgeKey] && (
-          <span className={`absolute top-3 ${document.documentElement.dir === 'rtl' ? 'right-3' : 'left-3'} px-3 py-1 text-xs font-body font-semibold rounded-full ${badgeStyles[badgeKey]}`}>
-            {t(badgeKey)}
+        <img src={product.images[0] || placeholder} alt={dishName(product, lang)} loading="lazy"
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+        {product.badge && (
+          <span className="absolute top-3 start-3 bg-accent text-accent-foreground px-3 py-1 rounded-full text-xs font-bold">
+            {t(product.badge as 'new')}
           </span>
         )}
-        <div className="absolute inset-0 bg-background/0 group-hover:bg-background/40 transition-all duration-500 flex items-center justify-center gap-2">
-          <button
-            onClick={(e) => { e.preventDefault(); onQuickView?.(product); }}
-            className="opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-4 group-hover:translate-y-0 bg-primary text-primary-foreground px-4 py-2.5 rounded-full text-sm font-body font-medium flex items-center gap-2 hover:bg-gold-hover"
-          >
+        {out && (
+          <div className="absolute inset-0 bg-foreground/50 flex items-center justify-center">
+            <span className="bg-card text-foreground px-4 py-1.5 rounded-full text-sm font-semibold">{t('outOfStock')}</span>
+          </div>
+        )}
+        {onQuickView && !out && (
+          <button onClick={() => onQuickView(product)} aria-label={t('quickView')}
+            className="absolute bottom-3 end-3 w-10 h-10 rounded-full bg-card/90 backdrop-blur text-foreground flex items-center justify-center opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300">
             <Eye className="w-4 h-4" />
-            {t('quickView')}
           </button>
-          <button
-            onClick={handleAddToCart}
-            className="opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-4 group-hover:translate-y-0 delay-75 bg-card text-foreground border border-border px-4 py-2.5 rounded-full text-sm font-body font-medium flex items-center gap-2 hover:border-primary/40"
-          >
-            <ShoppingBag className="w-4 h-4" />
-            {t('addToCart')}
-          </button>
+        )}
+      </div>
+      <div className="p-4 sm:p-5 flex flex-col flex-1">
+        <h3 className="font-heading text-xl sm:text-2xl text-foreground mb-1 line-clamp-1">{dishName(product, lang)}</h3>
+        {product.prep_time && (
+          <p className="flex items-center gap-1.5 text-xs text-muted-foreground mb-3"><Clock className="w-3.5 h-3.5" />{product.prep_time}</p>
+        )}
+        <div className="mt-auto flex items-center justify-between gap-2">
+          <div>
+            {sizes.length > 1 && <span className="block text-[11px] text-muted-foreground">{t('startingFrom')}</span>}
+            <span className="text-primary font-bold text-lg">{minPrice(product)} <span className="text-sm">{t('currency')}</span></span>
+          </div>
+          <div className="flex gap-2">
+            <Link to={`/product/${product.id}`} className="px-3 py-2 rounded-full border border-border text-xs sm:text-sm hover:border-primary hover:text-primary transition-colors">
+              {t('viewDetails')}
+            </Link>
+            {!out && (
+              <button onClick={quickAdd} aria-label={t('addToCart')} className="w-9 h-9 rounded-full bg-gold-gradient text-primary-foreground flex items-center justify-center hover:scale-110 transition-transform">
+                <Plus className="w-4 h-4" />
+              </button>
+            )}
+          </div>
         </div>
       </div>
-      <div className="p-5">
-        <h3 className="font-heading text-lg text-foreground mb-1">{product.name}</h3>
-        <p className="text-muted-foreground text-sm font-body mb-3">{product.size}</p>
-        <div className="flex items-center justify-between">
-          <span className="text-primary font-heading text-xl">{product.price} {t('currency')}</span>
-          <Link to={`/product/${product.id}`} className="text-sm font-body text-muted-foreground hover:text-primary transition-colors underline underline-offset-4">
-            {t('viewDetails')}
-          </Link>
-        </div>
-      </div>
-    </motion.div>
+    </div>
   );
 };
 
