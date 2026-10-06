@@ -17,39 +17,66 @@ export type Database = {
       brand_settings: {
         Row: {
           about_text: string
+          address: string
           brand_name: string
+          facebook_url: string
+          hero_image_url: string
+          hero_subtitle: string
+          hero_title: string
           id: number
+          instagram_url: string
           logo_url: string
+          min_order: number
+          phone: string
           primary_color: string
           secondary_color: string
           tagline: string
           updated_at: string
           whatsapp_number: string
           whatsapp_template: string
+          working_hours: string
         }
         Insert: {
           about_text?: string
+          address?: string
           brand_name?: string
+          facebook_url?: string
+          hero_image_url?: string
+          hero_subtitle?: string
+          hero_title?: string
           id?: number
+          instagram_url?: string
           logo_url?: string
+          min_order?: number
+          phone?: string
           primary_color?: string
           secondary_color?: string
           tagline?: string
           updated_at?: string
           whatsapp_number?: string
           whatsapp_template?: string
+          working_hours?: string
         }
         Update: {
           about_text?: string
+          address?: string
           brand_name?: string
+          facebook_url?: string
+          hero_image_url?: string
+          hero_subtitle?: string
+          hero_title?: string
           id?: number
+          instagram_url?: string
           logo_url?: string
+          min_order?: number
+          phone?: string
           primary_color?: string
           secondary_color?: string
           tagline?: string
           updated_at?: string
           whatsapp_number?: string
           whatsapp_template?: string
+          working_hours?: string
         }
         Relationships: []
       }
@@ -98,6 +125,33 @@ export type Database = {
         }
         Relationships: []
       }
+      delivery_zones: {
+        Row: {
+          created_at: string
+          fee: number
+          id: string
+          is_active: boolean
+          name: string
+          name_ar: string
+        }
+        Insert: {
+          created_at?: string
+          fee?: number
+          id?: string
+          is_active?: boolean
+          name: string
+          name_ar?: string
+        }
+        Update: {
+          created_at?: string
+          fee?: number
+          id?: string
+          is_active?: boolean
+          name?: string
+          name_ar?: string
+        }
+        Relationships: []
+      }
       products: {
         Row: {
           badge: string | null
@@ -105,13 +159,18 @@ export type Database = {
           category: string
           created_at: string
           description: string
+          description_ar: string
           id: string
           images: string[]
+          ingredients: string[]
           middle_notes: string[]
           name: string
+          name_ar: string
           order_clicks: number
+          prep_time: string
           price: number
           size: string
+          sizes: Json
           status: string
           top_notes: string[]
           updated_at: string
@@ -123,13 +182,18 @@ export type Database = {
           category?: string
           created_at?: string
           description?: string
+          description_ar?: string
           id?: string
           images?: string[]
+          ingredients?: string[]
           middle_notes?: string[]
           name: string
+          name_ar?: string
           order_clicks?: number
+          prep_time?: string
           price?: number
           size?: string
+          sizes?: Json
           status?: string
           top_notes?: string[]
           updated_at?: string
@@ -141,13 +205,18 @@ export type Database = {
           category?: string
           created_at?: string
           description?: string
+          description_ar?: string
           id?: string
           images?: string[]
+          ingredients?: string[]
           middle_notes?: string[]
           name?: string
+          name_ar?: string
           order_clicks?: number
+          prep_time?: string
           price?: number
           size?: string
+          sizes?: Json
           status?: string
           top_notes?: string[]
           updated_at?: string
